@@ -10,10 +10,17 @@ import org.apache.commons.codec.net.URLCodec;
 
 /**
  * @author Christian Ternes
+ * URLEncoder handles the encoding of strings to be HTTP-conform
  *
  */
 public class URLEncoder {
 
+	/**
+	 * Convertes the given string into a HTTP-conform string
+	 * 
+	 * @param unescaped the string that should be escaped
+	 * @return the HTTP-conform string
+	 */
 	public static String escapeString(String unescaped) {
 		if(unescaped != null) {
 			URLCodec codec = new URLCodec();

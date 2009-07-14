@@ -20,9 +20,18 @@ import org.xml.sax.SAXException;
 /**
  * @author Christian Ternes
  *
+ * ProwlResponseParser is a class to parse an input stream from the prowl service and 
+ * extract the response message from it.
+ *
  */
 public class ProwlResponseParser {
 	
+	/**
+	 * Retrieves the response message from the prowl service
+	 * 
+	 * @param in the inputstream from the prowl service
+	 * @return the response message
+	 */
 	public String getResponseMessage(InputStream in) {
 		if(in == null) {
 			throw new IllegalArgumentException("InputStream must not be null");

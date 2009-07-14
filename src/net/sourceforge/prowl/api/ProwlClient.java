@@ -22,13 +22,13 @@ import net.sourceforge.prowl.url.URLEncoder;
  * This prowl client pushes an Prowl event to the prowl service and therefore to your iPhone.
  * It should be pretty easy to use.
  * For example:
- * <code>
+ * <p>
  		ProwlEvent event = new DefaultProwlEvent("12345", 
 				"application", "event", "This is just a little test", 0);
 		
 		ProwlClient pc = new ProwlClient();
 		String response = pc.pushEvent(event);
- *  </code>
+ *  <p>
  *
  * To use this API you need an the Prowl app as well as an Prowl account: http://prowl.weks.net/
  *
@@ -143,7 +143,7 @@ public class ProwlClient {
 		this.providerKey = providerKey;
 	}
 	
-	public String getproviderKey() {
+	public String getProviderKey() {
 		return providerKey;
 	}
 }
