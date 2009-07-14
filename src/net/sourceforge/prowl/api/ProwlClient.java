@@ -2,10 +2,13 @@ package net.sourceforge.prowl.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.net.URL;
+import java.net.URLConnection;
 
-import net.sourceforge.prowl.proxy.ProxyWrapper;
 import net.sourceforge.prowl.url.ProwlResponseParser;
 import net.sourceforge.prowl.url.URLEncoder;
 
@@ -35,6 +38,7 @@ public class ProwlClient {
 	private String providerKey;
 	private String prowlURL = "https://prowl.weks.net/publicapi/";
 	private ProwlResponseParser responseParser = new ProwlResponseParser();
+	private Proxy proxy = null;
 	
 	public ProwlClient() {
 	}
@@ -89,7 +93,15 @@ public class ProwlClient {
 	private String sendPushNotification(String url) {
 		try {
 			URL requestURL = new URL(url);
-			InputStream openStream = requestURL.openStream();
+			URLConnection connection = null;
+			if(proxy == null) {
+				connection = requestURL.openConnection();
+			}
+			else {
+				connection = requestURL.openConnection(proxy);
+			}
+			InputStream openStream = connection.getInputStream();
+			
 			return responseParser.getResponseMessage(openStream);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -100,12 +112,31 @@ public class ProwlClient {
 		}
 	}
 
-	public void setProxy(String type, String host, String port) {
-		ProxyWrapper.enableGlobalProxy(type, host, port);
+	/**
+	 * Sets a http or socks proxy for the connection.
+	 * 
+	 * @param type the type of the proxy, must be SOCKS or HTTP
+	 * @param host the proxy host
+	 * @param port the proxy port
+	 */
+	public void setProxy(String type, String host, int port) {
+		SocketAddress sa = new InetSocketAddress(host, port);
+		if("SOCKS".equalsIgnoreCase(type)) {
+			proxy = new Proxy(Proxy.Type.SOCKS,sa);
+		}
+		else if("HTTP".equalsIgnoreCase(type)) {
+			proxy = new Proxy(Proxy.Type.HTTP,sa);
+		}
+		else {
+			throw new IllegalArgumentException("Unknown proxy type");
+		}
 	}
 	
+	/**
+	 * Removes the proxy and enables a direct connection.
+	 */
 	public void removeProxy() {
-		ProxyWrapper.disableGlobalProxy();
+		proxy = null;
 	}
 	
 	public void setProviderKey(String providerKey) {
