@@ -24,11 +24,16 @@ import net.sourceforge.prowl.url.URLEncoder;
  * <p>
  * Example usage:
  * <code><pre>
- 		ProwlEvent event = new DefaultProwlEvent("12345", 
-				"application", "event", "This is just a little test", 0);
-		
-		ProwlClient pc = new ProwlClient();
-		String response = pc.pushEvent(event);
+		ProwlClient c = new ProwlClient();
+		ProwlEvent e = new DefaultProwlEvent(
+				"myKey", "application", "event",
+				"message", 0);
+		try {
+			String message = c.pushEvent(e);
+			System.out.println(message);
+		} catch (ProwlException e1) {
+			e1.printStackTrace();
+		}
  </pre></code>
  *<p>
  * To use this API you need the Prowl app as well as an Prowl account: {@link http://prowl.weks.net/}
