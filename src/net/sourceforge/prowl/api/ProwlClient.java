@@ -1,36 +1,37 @@
 package net.sourceforge.prowl.api;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.URL;
-import java.net.URLConnection;
 
+import net.sourceforge.prowl.exception.ProwlException;
 import net.sourceforge.prowl.url.ProwlResponseParser;
 import net.sourceforge.prowl.url.URLEncoder;
 
 /**
- * BSD-style license; for more info see http://prowlapi.sourceforge.net/
+ * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
 /**
  * @author Christian Ternes
- * 
+ * <p>
  * This prowl client pushes an Prowl event to the prowl service and therefore to your iPhone.
  * It should be pretty easy to use.
- * For example:
  * <p>
+ * Example usage:
+ * <code><pre>
  		ProwlEvent event = new DefaultProwlEvent("12345", 
 				"application", "event", "This is just a little test", 0);
 		
 		ProwlClient pc = new ProwlClient();
 		String response = pc.pushEvent(event);
- *  <p>
- *
- * To use this API you need an the Prowl app as well as an Prowl account: http://prowl.weks.net/
+ </pre></code>
+ *<p>
+ * To use this API you need the Prowl app as well as an Prowl account: {@link http://prowl.weks.net/}
  *
  */
 public class ProwlClient {
@@ -48,9 +49,10 @@ public class ProwlClient {
 	 * 
 	 * @param prowlEvent the prowl event that should be pushed
 	 * @return a result message
+	 * @throws ProwlException if something went wrong with the request, further details can be found in the exception 
 	 * @see ProwlEvent
 	 */
-	public String pushEvent(ProwlEvent prowlEvent) {
+	public String pushEvent(ProwlEvent prowlEvent) throws ProwlException {
 		if(prowlEvent == null || prowlEvent.getApiKey()==null || prowlEvent.getApplication()==null ||
 				prowlEvent.getDescription()==null || prowlEvent.getEvent()==null) {
 			throw new IllegalArgumentException("Arguments must not be null");
@@ -87,26 +89,31 @@ public class ProwlClient {
 		String prio = "priority="+priority;
 		
 		prowlURL += "add?"+apiKey+"&"+application+"&"+event+"&"+desc+"&"+prio;
+		if(providerKey != null && !providerKey.isEmpty()) {
+			prowlURL +="&providerkey="+providerKey;
+		}
+		
 		return prowlURL;
 	}
 	
-	private String sendPushNotification(String url) {
+	private String sendPushNotification(String url) throws ProwlException {
 		try {
 			URL requestURL = new URL(url);
-			URLConnection connection = null;
+			HttpURLConnection connection = null;
 			if(proxy == null) {
-				connection = requestURL.openConnection();
+				connection = (HttpURLConnection) requestURL.openConnection();
 			}
 			else {
-				connection = requestURL.openConnection(proxy);
+				connection = (HttpURLConnection) requestURL.openConnection(proxy);
 			}
-			InputStream openStream = connection.getInputStream();
-			
-			return responseParser.getResponseMessage(openStream);
+
+			String responseMessage = responseParser.getResponseMessage(connection);
+			return responseMessage;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return e.getMessage();
 		} catch (IOException e) {
+			//TODO: could not connect
 			e.printStackTrace();
 			return e.getMessage();
 		}
@@ -139,10 +146,21 @@ public class ProwlClient {
 		proxy = null;
 	}
 	
+	/**
+	 * Sets your provider key. This is optional and only necessary if you are
+	 * whitelisted for the prowl service. 
+	 * 
+	 * @param providerKey the provider key
+	 */
 	public void setProviderKey(String providerKey) {
 		this.providerKey = providerKey;
 	}
 	
+	/**
+	 * Retrieves the provider key.
+	 * 
+	 * @return the provider key
+	 */
 	public String getProviderKey() {
 		return providerKey;
 	}

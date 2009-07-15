@@ -2,10 +2,13 @@ package net.sourceforge.prowl.url;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import net.sourceforge.prowl.exception.ProwlException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -14,14 +17,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
- * BSD-style license; for more info see http://prowlapi.sourceforge.net/
+ * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
 /**
  * @author Christian Ternes
- *
- * ProwlResponseParser is a class to parse an input stream from the prowl service and 
- * extract the response message from it.
+ * <p>
+ * ProwlResponseParser is a class to extract a response from the prowl service.
  *
  */
 public class ProwlResponseParser {
@@ -29,18 +31,21 @@ public class ProwlResponseParser {
 	/**
 	 * Retrieves the response message from the prowl service
 	 * 
-	 * @param in the inputstream from the prowl service
+	 * @param connection the current connection to the prowl service
 	 * @return the response message
+	 * @throws ProwlException if something went wrong with the request, further details can be found in the exception
 	 */
-	public String getResponseMessage(InputStream in) {
-		if(in == null) {
-			throw new IllegalArgumentException("InputStream must not be null");
+	public String getResponseMessage(HttpURLConnection connection) throws ProwlException {
+		if(connection == null) {
+			throw new IllegalArgumentException("connection must not be null");
 		}
+		checkForErrors(connection);
 		
 		try {
+			InputStream inputStream = connection.getInputStream();
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
 		    DocumentBuilder builder = factory.newDocumentBuilder(); 
-		    Document document = builder.parse(in); 
+		    Document document = builder.parse(inputStream); 
 		    NodeList childNodes = document.getChildNodes();
 		    if(childNodes.getLength() > 0) {
 		    	Node prowl = childNodes.item(0);
@@ -66,5 +71,28 @@ public class ProwlResponseParser {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private void checkForErrors(HttpURLConnection connection) throws ProwlException {
+		try {
+			int code = connection.getResponseCode();
+			if(code == 400) {
+				throw new ProwlException(code, "Bad request, the parameters you provided did not validate.");
+			}
+			else if(code == 401) {
+				throw new ProwlException(code, "The API key given is not valid, and does not correspond to a user.");
+			}
+			else if(code == 405) {
+				throw new ProwlException(code, "Method not allowed, you attempted to use a non-SSL connection to Prowl.");
+			}
+			else if(code == 406) {
+				throw new ProwlException(code, "Your IP address has exceeded the API limit.");
+			}
+			else if(code == 500) {
+				throw new ProwlException(code, "Internal server error, something failed to execute properly on the Prowl side.");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

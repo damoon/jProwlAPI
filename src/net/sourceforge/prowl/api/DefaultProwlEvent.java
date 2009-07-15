@@ -1,7 +1,7 @@
 package net.sourceforge.prowl.api;
 
 /**
- * BSD-style license; for more info see http://prowlapi.sourceforge.net/
+ * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
 /**

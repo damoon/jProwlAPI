@@ -5,11 +5,12 @@ import java.io.UnsupportedEncodingException;
 import org.apache.commons.codec.net.URLCodec;
 
 /**
- * BSD-style license; for more info see http://prowlapi.sourceforge.net/
+ * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
 /**
  * @author Christian Ternes
+ * <p>
  * URLEncoder handles the encoding of strings to be HTTP-conform
  *
  */

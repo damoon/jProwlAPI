@@ -1,11 +1,12 @@
 package net.sourceforge.prowl.api;
 
 /**
- * BSD-style license; for more info see http://prowlapi.sourceforge.net/
+ * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
 /**
  * @author Christian Ternes
+ * <p>
  * This interface specifies the methods that are needed to communicate with the Prowl application
  *
  */
