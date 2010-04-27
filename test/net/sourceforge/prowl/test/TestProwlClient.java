@@ -17,7 +17,15 @@ public class TestProwlClient {
 	
 	@BeforeClass
 	public static void setUp() {
-		client = new ProwlClient();
+		class MockProwlClient extends ProwlClient {
+			@Override
+			protected String sendPushNotification(String url)
+					throws ProwlException {
+				return url;
+			}
+		}
+		
+		client = new MockProwlClient();
 	}
 	
 	@Test
@@ -69,14 +77,10 @@ public class TestProwlClient {
 	}
 	
 	@Test
-	public void testApiKey() throws Exception {
-		try {
-			ProwlEvent prowlEvent = new DefaultProwlEvent("", "", "", "", 0);
-			client.pushEvent(prowlEvent);
-			fail();
-		}
-		catch(ProwlException e) {
-			//good
-		}
+	public void testSuccess() throws Exception {
+		ProwlEvent prowlEvent = new DefaultProwlEvent("key", "app", "event", "desc", 2);
+		String url = client.pushEvent(prowlEvent);
+		assertEquals("https://prowl.weks.net/publicapi/add?apikey=key&application=app&event=event&description=desc&priority=2",
+				url);
 	}
 }
