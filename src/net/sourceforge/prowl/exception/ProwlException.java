@@ -29,7 +29,7 @@ public class ProwlException extends Exception {
 	/**
 	 * Retrieves the response code from an request.
 	 * 
-	 * @return the response code
+	 * @return the response code, e.g. 401
 	 */
 	public int getResponseCode() {
 		return responseCode;

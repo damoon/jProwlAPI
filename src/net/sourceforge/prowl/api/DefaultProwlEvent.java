@@ -16,6 +16,12 @@ public class DefaultProwlEvent implements ProwlEvent {
 	private int priority = 0;
 	
 	/**
+	 * Constructs a new empty prowl event
+	 */
+	public DefaultProwlEvent() {
+	}
+	
+	/**
 	 * Constructs a new prowl event with all necessary parameters.
 	 * 
 	 * @param apiKey your device api key

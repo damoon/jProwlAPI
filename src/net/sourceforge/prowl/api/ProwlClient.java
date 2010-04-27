@@ -54,7 +54,8 @@ public class ProwlClient {
 	 * 
 	 * @param prowlEvent the prowl event that should be pushed
 	 * @return a result message
-	 * @throws ProwlException if something went wrong with the request, further details can be found in the exception 
+	 * @throws ProwlException if something went wrong with the request, further details can be found in the exception
+	 * @throws IllegalArgumentException if required data in the prowl event are not set or priority is out of range 
 	 * @see ProwlEvent
 	 */
 	public String pushEvent(ProwlEvent prowlEvent) throws ProwlException {
@@ -101,7 +102,7 @@ public class ProwlClient {
 		return prowlURL;
 	}
 	
-	private String sendPushNotification(String url) throws ProwlException {
+	protected String sendPushNotification(String url) throws ProwlException {
 		try {
 			URL requestURL = new URL(url);
 			HttpURLConnection connection = null;
@@ -168,5 +169,23 @@ public class ProwlClient {
 	 */
 	public String getProviderKey() {
 		return providerKey;
+	}
+	
+	/**
+	 * Retrieves the prowl server url.
+	 * 
+	 * @return the prowl server url
+	 */
+	public String getProwlUrl() {
+		return prowlURL;
+	}
+	
+	/**
+	 * Sets the prowl server url. This is optional and only necessary if the prowl server url changes. 
+	 * 
+	 * @param prowlUrl the prowl server url
+	 */
+	public void setProwlUrl(String url) {
+		this.prowlURL = url;
 	}
 }
