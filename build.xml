@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="jProwlAPI" default="fatjar" basedir=".">
+<project name="jProwlAPI" default="dist" basedir=".">
 	<property name="app.name" value="jProwlAPI" />
 	<property name="app.version" value="0.4" />
 
@@ -26,7 +26,7 @@
 		<delete dir="dist"/>
 	</target>
 	<target name="dist" depends="fatjar">
-		<zip destfile="dist/${app.name}-${app.version}-bin-ALPHA.zip"
+		<zip destfile="dist/${app.name}-${app.version}-bin-BETA.zip"
 		       basedir="dist"
 		       update="true"/>
 	</target>
