@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="jProwlAPI" default="fatjar" basedir=".">
 	<property name="app.name" value="jProwlAPI" />
-	<property name="app.version" value="0.3" />
+	<property name="app.version" value="0.4" />
 
 	<target name="fatjar" depends="clean, javadoc, copyMisc">
 		<fatjar.build output="dist/${app.name}-${app.version}.jar">
