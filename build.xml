@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
 <project name="jProwlAPI" default="dist" basedir=".">
 	<property name="app.name" value="jProwlAPI" />
-	<property name="app.version" value="0.4" />
+	<property name="app.version" value="0.5" />
 
 	<target name="fatjar" depends="clean, javadoc, copyMisc">
 		<fatjar.build output="dist/${app.name}-${app.version}.jar">
-			<fatjar.manifest />
-			<fatjar.filesource path="D:\eclipse\workspaces\workspace_3.3_Europa\ProwlApi\bin" relpath="" />
-			<fatjar.jarsource file="D:\eclipse\workspaces\workspace_3.3_Europa\ProwlApi\lib\commons-codec-1.3.jar" relpath="" />
-		</fatjar.build>
+	            <fatjar.manifest/>
+	            <fatjar.filesource path="D:\workspace\jProwlApi\bin" relpath="">
+	                <fatjar.exclude relpath="net/sourceforge/prowl/test/"/>
+	            </fatjar.filesource>
+	            <fatjar.jarsource file="D:\workspace\jProwlApi\lib\commons-codec-1.3.jar" relpath=""/>
+	        </fatjar.build>
 	</target>
 	<target name="javadoc">
 		<javadoc access="public" author="true" classpath="lib/commons-codec-1.3.jar"
@@ -26,7 +28,7 @@
 		<delete dir="dist"/>
 	</target>
 	<target name="dist" depends="fatjar">
-		<zip destfile="dist/${app.name}-${app.version}-bin-BETA.zip"
+		<zip destfile="dist/${app.name}-${app.version}-bin.zip"
 		       basedir="dist"
 		       update="true"/>
 	</target>
