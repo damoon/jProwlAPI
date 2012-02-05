@@ -1,5 +1,9 @@
 package net.sourceforge.prowl.url;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.sourceforge.prowl.api.ProwlCommand;
 import net.sourceforge.prowl.api.ProwlParameter;
 
@@ -16,13 +20,13 @@ import net.sourceforge.prowl.api.ProwlParameter;
 public class DefaultProwlURLBuilder implements ProwlURLBuilder {
 
 	private static String PROWL_API_URL = "https://api.prowlapp.com/publicapi/";
-	private String url;
+	private ProwlCommand prowlCommand;
+	private Map<ProwlParameter, String> paramMap = new HashMap<ProwlParameter, String>();
 	
 	/**
 	 * Default private constructor.
 	 */
 	private DefaultProwlURLBuilder() {
-		this.url = PROWL_API_URL;
 	}
 	
 	/**
@@ -36,25 +40,50 @@ public class DefaultProwlURLBuilder implements ProwlURLBuilder {
 	
 	public ProwlURLBuilder useCommand(ProwlCommand command) {
 		if(command != null) {
-			url += command.getApiMapping();
+			this.prowlCommand = command;
 		}
 		return this;
 	}
 	
 	public ProwlURLBuilder appendParam(ProwlParameter param, String value) {
 		if(param != null && value != null) {
-			url += "?" + param;
-			url += "=" + value;
-			url += "&";
+			paramMap.put(param, value);
 		}
 		return this;
 	}
 	
 	public String getURL() {
-		if(url.endsWith("&")) {
-			return url.substring(0, url.length()-1);
+		StringBuilder url = new StringBuilder();
+		url.append(PROWL_API_URL);
+		
+		if(prowlCommand != null) {
+			url.append(prowlCommand.getApiMapping());
 		}
-		return url;
+		appendParameters(url);
+		
+		return url.toString();
+	}
+
+	private void appendParameters(StringBuilder url) {
+		if(!paramMap.isEmpty()) {
+			url.append("?");
+
+			boolean isFirst = true;
+			Iterator<ProwlParameter> iter = paramMap.keySet().iterator();
+			while(iter.hasNext()) {
+				ProwlParameter key = iter.next();
+				String value = paramMap.get(key);
+				
+				if(!isFirst) {
+					url.append("&");
+				}
+				
+				url.append(key);
+				url.append("=");
+				url.append(value);
+				isFirst = false;
+			}
+		}
 	}
 	
 	/**
