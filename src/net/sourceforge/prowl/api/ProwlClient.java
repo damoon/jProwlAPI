@@ -10,7 +10,9 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import net.sourceforge.prowl.exception.ProwlException;
+import net.sourceforge.prowl.url.DefaultProwlURLBuilder;
 import net.sourceforge.prowl.url.ProwlResponseParser;
+import net.sourceforge.prowl.url.ProwlURLBuilder;
 import net.sourceforge.prowl.url.URLEncoder;
 
 /**
@@ -43,11 +45,10 @@ import net.sourceforge.prowl.url.URLEncoder;
 public class ProwlClient {
 
 	private String providerKey;
-	private String prowlURL = "https://api.prowlapp.com/publicapi/";
 	private ProwlResponseParser responseParser = new ProwlResponseParser();
 	private Proxy proxy = null;
 	private int connectionTimeout = 5000; //default = 5s
-	private int readTimeout = 2000; //default = 2s
+	private int readTimeout = 5000; //default = 2s
 	
 	public ProwlClient() {
 	}
@@ -102,29 +103,21 @@ public class ProwlClient {
 		desc = URLEncoder.escapeString(desc);
 		url = URLEncoder.escapeString(url);
 		
-		String prowlURL = constructURL(apiKey, application, event, desc, priority, url);
-		String response = sendPushNotification(prowlURL);
+		ProwlURLBuilder prowlUrl = DefaultProwlURLBuilder.createUrl().useCommand(ProwlCommand.add);
+		prowlUrl.appendParam(ProwlParameter.apikey, apiKey);
+		prowlUrl.appendParam(ProwlParameter.application, application);
+		prowlUrl.appendParam(ProwlParameter.event, event);
+		prowlUrl.appendParam(ProwlParameter.description, desc);
+		prowlUrl.appendParam(ProwlParameter.priority, String.valueOf(priority));
+		prowlUrl.appendParam(ProwlParameter.url, url);
+		prowlUrl.appendParam(ProwlParameter.providerkey, providerKey);
+		
+		String finalUrl = prowlUrl.getURL();
+		String response = sendPushNotification(finalUrl);
 		
 		return response;
 	}
 
-	private String constructURL(String apiKey, String application, String event,
-			String desc, int priority, String url) {
-		apiKey = "apikey="+apiKey;
-		application = "application="+application;
-		event = "event="+event;
-		desc = "description="+desc;
-		String prio = "priority="+priority;
-		url = "url="+url;
-		
-		prowlURL += "add?"+apiKey+"&"+application+"&"+event+"&"+desc+"&"+prio+"&"+url;
-		if(providerKey != null && !providerKey.isEmpty()) {
-			prowlURL +="&providerkey="+providerKey;
-		}
-		
-		return prowlURL;
-	}
-	
 	protected String sendPushNotification(String url) throws ProwlException {
 		try {
 			URL requestURL = new URL(url);
@@ -207,7 +200,7 @@ public class ProwlClient {
 	 * @return the prowl server url
 	 */
 	public String getProwlUrl() {
-		return prowlURL;
+		return DefaultProwlURLBuilder.getProwlApiUrl();
 	}
 	
 	/**
@@ -216,6 +209,30 @@ public class ProwlClient {
 	 * @param prowlUrl the prowl server url
 	 */
 	public void setProwlUrl(String url) {
-		this.prowlURL = url;
+		DefaultProwlURLBuilder.setProwlApiUrl(url);
+	}
+	
+	/**
+	 * Verifies the given api key. 
+	 * Returns true if the api key is valid, false if api key is invalid.
+	 * 
+	 * @param apiKey the api key to verify
+	 * @return true if the api key is valid, false otherwise
+	 * @throws ProwlException if something went wrong with the request, further details can be found in the exception
+	 */
+	public boolean verifyApiKey(String apiKey) throws ProwlException {
+		try {
+			String prowlUrl = DefaultProwlURLBuilder.createUrl().useCommand(ProwlCommand.verify).appendParam(ProwlParameter.apikey, apiKey).getURL();
+			sendPushNotification(prowlUrl);
+		}
+		catch(ProwlException e) {
+			if(401 == e.getResponseCode()) {
+				return false;
+			}
+			else {
+				throw e;
+			}
+		}
+		return true;
 	}
 }
