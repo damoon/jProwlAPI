@@ -4,7 +4,7 @@ public class Example {
 		ProwlClient c = new ProwlClient();
 		ProwlEvent e = new DefaultProwlEvent(
 				"myKey", "application", "event",
-				"message", 0);
+				"message", 0, "customLaunchUrl");
 		String message;
 		try {
 			message = c.pushEvent(e);
