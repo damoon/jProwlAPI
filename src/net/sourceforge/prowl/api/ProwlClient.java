@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 
 import net.sourceforge.prowl.exception.ProwlException;
@@ -45,9 +46,28 @@ public class ProwlClient {
 	private String prowlURL = "https://api.prowlapp.com/publicapi/";
 	private ProwlResponseParser responseParser = new ProwlResponseParser();
 	private Proxy proxy = null;
+	private int connectionTimeout = 5000; //default = 5s
+	private int readTimeout = 2000; //default = 2s
 	
 	public ProwlClient() {
 	}
+	
+	/**
+	 * Constructs a new ProwlClient with the given timeouts.
+	 * If the timeouts are < 0 the default timeouts will be used instead.
+	 * 
+	 * @param connectionTimeout the connection timeout in ms, DEFAULT = 5000
+	 * @param readTimeout the read timeout in ms, DEFAULT = 2000
+	 */
+	public ProwlClient(int connectionTimeout, int readTimeout) {
+		if(connectionTimeout > 0) {
+			this.connectionTimeout = connectionTimeout;
+		}
+		if(readTimeout > 0) {
+			this.readTimeout = readTimeout;
+		}
+	}
+	
 	
 	/**
 	 * Pushes an prowl event to the prowl service.
@@ -115,16 +135,23 @@ public class ProwlClient {
 			else {
 				connection = (HttpURLConnection) requestURL.openConnection(proxy);
 			}
+			//set timeouts
+			connection.setConnectTimeout(connectionTimeout);
+			connection.setReadTimeout(readTimeout);
 
 			String responseMessage = responseParser.getResponseMessage(connection);
 			return responseMessage;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			return e.getMessage();
-		} catch (IOException e) {
+		} catch(SocketTimeoutException ste) {
+			ste.printStackTrace();
+			return ste.getMessage();
+		}
+		catch (IOException ioe) {
 			//TODO: could not connect
-			e.printStackTrace();
-			return e.getMessage();
+			ioe.printStackTrace();
+			return ioe.getMessage();
 		}
 	}
 
