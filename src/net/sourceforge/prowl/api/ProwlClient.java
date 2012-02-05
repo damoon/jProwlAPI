@@ -48,7 +48,7 @@ public class ProwlClient {
 	private ProwlResponseParser responseParser = new ProwlResponseParser();
 	private Proxy proxy = null;
 	private int connectionTimeout = 5000; //default = 5s
-	private int readTimeout = 5000; //default = 2s
+	private int readTimeout = 5000; //default = 5s
 	
 	public ProwlClient() {
 	}
@@ -58,7 +58,7 @@ public class ProwlClient {
 	 * If the timeouts are < 0 the default timeouts will be used instead.
 	 * 
 	 * @param connectionTimeout the connection timeout in ms, DEFAULT = 5000
-	 * @param readTimeout the read timeout in ms, DEFAULT = 2000
+	 * @param readTimeout the read timeout in ms, DEFAULT = 5000
 	 */
 	public ProwlClient(int connectionTimeout, int readTimeout) {
 		if(connectionTimeout > 0) {
