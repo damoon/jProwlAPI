@@ -36,13 +36,13 @@ import net.sourceforge.prowl.url.URLEncoder;
 		}
  </pre></code>
  *<p>
- * To use this API you need the Prowl app as well as an Prowl account: {@link http://prowl.weks.net/}
+ * To use this API you need the Prowl app as well as an Prowl account: {@link http://www.prowlapp.com/}
  *
  */
 public class ProwlClient {
 
 	private String providerKey;
-	private String prowlURL = "https://prowl.weks.net/publicapi/";
+	private String prowlURL = "https://api.prowlapp.com/publicapi/";
 	private ProwlResponseParser responseParser = new ProwlResponseParser();
 	private Proxy proxy = null;
 	
@@ -74,27 +74,30 @@ public class ProwlClient {
 		String application = prowlEvent.getApplication();
 		String event = prowlEvent.getEvent();
 		String desc = prowlEvent.getDescription();
+		String url = prowlEvent.getUrl();
 
 		//escape all strings
 		application = URLEncoder.escapeString(application);
 		event = URLEncoder.escapeString(event);
 		desc = URLEncoder.escapeString(desc);
+		url = URLEncoder.escapeString(url);
 		
-		String prowlURL = constructURL(apiKey, application, event, desc, priority);
+		String prowlURL = constructURL(apiKey, application, event, desc, priority, url);
 		String response = sendPushNotification(prowlURL);
 		
 		return response;
 	}
 
 	private String constructURL(String apiKey, String application, String event,
-			String desc, int priority) {
+			String desc, int priority, String url) {
 		apiKey = "apikey="+apiKey;
 		application = "application="+application;
 		event = "event="+event;
 		desc = "description="+desc;
 		String prio = "priority="+priority;
+		url = "url="+url;
 		
-		prowlURL += "add?"+apiKey+"&"+application+"&"+event+"&"+desc+"&"+prio;
+		prowlURL += "add?"+apiKey+"&"+application+"&"+event+"&"+desc+"&"+prio+"&"+url;
 		if(providerKey != null && !providerKey.isEmpty()) {
 			prowlURL +="&providerkey="+providerKey;
 		}

@@ -13,6 +13,7 @@ public class DefaultProwlEvent implements ProwlEvent {
 	private String description;
 	private String event;
 	private String application;
+	private String url; 
 	private int priority = 0;
 	
 	/**
@@ -32,11 +33,27 @@ public class DefaultProwlEvent implements ProwlEvent {
 	 */
 	public DefaultProwlEvent(String apiKey, String application, String event, 
 			String description, int priority) {
+		this(apiKey, application, event, description, priority, null);
+	}
+	
+	/**
+	 * Constructs a new prowl event with all necessary parameters.
+	 * 
+	 * @param apiKey your device api key
+	 * @param application the application from which comes the event
+	 * @param event the event name of the prowl event
+	 * @param description the detailed message of the prowl event
+	 * @param priority the event priority between -2 and 2
+	 * @param url the url of the prowl event
+	 */
+	public DefaultProwlEvent(String apiKey, String application, String event, 
+			String description, int priority, String url) {
 		this.apiKey = apiKey;
 		this.application = application;
 		this.event = event;
 		this.description = description;
 		this.priority = priority;
+		this.url = url;
 	}
 	
 	@Override
@@ -78,6 +95,14 @@ public class DefaultProwlEvent implements ProwlEvent {
 	@Override
 	public void setPriority(int prio) {
 		this.priority = prio;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 	
 }

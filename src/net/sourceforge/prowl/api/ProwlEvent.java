@@ -88,4 +88,19 @@ public interface ProwlEvent {
 	 * @return the description of the prowl event
 	 */
 	public String getDescription();
+	
+	/**
+	 * <i>Requires Prowl 1.2</i><br/>
+	 * Sets the url of the prowl event. This will trigger a redirect when launched, and is viewable in the notification list.
+	 * 
+	 * @param url the redirect url
+	 */
+	public void setUrl(String url);
+	
+	/**
+	 * Retrieves the url from the prowl event.
+	 * 
+	 * @return the url of the prowl event
+	 */
+	public String getUrl();
 }
