@@ -1,9 +1,0 @@
-CHANGELOG
-================
-
-Version 0.5
---------------
--Added verifyApiKey method to ProwlClient to provide a check if an api key is valid 
--Added url parameter to ProwlEvent
--Added connection and read timeouts to ProwlClient
--Minor enhancements
