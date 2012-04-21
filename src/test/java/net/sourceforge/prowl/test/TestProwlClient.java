@@ -27,60 +27,39 @@ public class TestProwlClient {
 		
 		client = new MockProwlClient();
 	}
-	
-	@Test
+
+	@Test(expected=IllegalArgumentException.class)
 	public void testNull() throws Exception {
-		try {
-			client.pushEvent(null);
-			fail();
-		}
-		catch(IllegalArgumentException e) {
-			//good
-		}
-		
+		client.pushEvent(null);		
 	}
-	
-	@Test
+
+	@Test(expected=IllegalArgumentException.class)
 	public void testEmptyEvent() throws Exception {
-		try {
-			client.pushEvent(new DefaultProwlEvent());
-			fail();
-		}
-		catch(IllegalArgumentException e) {
-			//good
-		}
+		client.pushEvent(new DefaultProwlEvent());
 	}
-	
-	@Test
+
+	@Test(expected=IllegalArgumentException.class)
 	public void testPriority() throws Exception {
-		try {
-			ProwlEvent prowlEvent = new DefaultProwlEvent("", "", "", "", 10);
-			client.pushEvent(prowlEvent);
-			fail();
-		}
-		catch(IllegalArgumentException e) {
-			//good
-		}
+		ProwlEvent prowlEvent = new DefaultProwlEvent("", "", "", "", 10);
+		client.pushEvent(prowlEvent);
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void testNullArguments() throws Exception {
-		try {
-			ProwlEvent prowlEvent = new DefaultProwlEvent("", null, "", "", 0);
-			client.pushEvent(prowlEvent);
-			fail();
-		}
-		catch(IllegalArgumentException e) {
-			//good
-		}
-		
+		ProwlEvent prowlEvent = new DefaultProwlEvent("", null, "", "", 0);
+		client.pushEvent(prowlEvent);		
 	}
 	
 	@Test
 	public void testSuccess() throws Exception {
 		ProwlEvent prowlEvent = new DefaultProwlEvent("key", "app", "event", "desc", 2);
 		String url = client.pushEvent(prowlEvent);
-		assertEquals("https://prowl.weks.net/publicapi/add?apikey=key&application=app&event=event&description=desc&priority=2",
-				url);
+		assertTrue(url.contains("description=desc"));
+		assertTrue(url.contains("event=event"));
+		assertTrue(url.contains("application=app"));
+		assertTrue(url.contains("apikey=key"));
+		assertTrue(url.contains("priority=2"));
+		assertSame("https://api.prowlapp.com/publicapi/add?description=desc&event=event&application=app&apikey=key&priority=2".length(),
+				url.length());
 	}
 }

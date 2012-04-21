@@ -13,6 +13,10 @@ package net.sourceforge.prowl.exception;
  */
 public class ProwlException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int responseCode;
 	
 	/**

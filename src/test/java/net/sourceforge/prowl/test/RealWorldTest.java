@@ -1,6 +1,6 @@
 package net.sourceforge.prowl.test;
 
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -11,19 +11,13 @@ import net.sourceforge.prowl.exception.ProwlException;
 
 public class RealWorldTest {
 
-	@Test
-	public void testSendMessage() {
+	@Test(expected=ProwlException.class)
+	public void testSendMessage() throws ProwlException {
 		ProwlClient c = new ProwlClient();
 		ProwlEvent e = new DefaultProwlEvent(
 				"myKey", "application", "event",
 				"message", 0, "customLaunchUrl");
-		String message;
-		try {
-			message = c.pushEvent(e);
-			System.out.println(message);
-		} catch (ProwlException e1) {
-			e1.printStackTrace();
-		}
+		c.pushEvent(e);
 	}
 	
 	@Test
@@ -31,7 +25,7 @@ public class RealWorldTest {
 		ProwlClient c = new ProwlClient();
 		try {
 			boolean isKeyValid = c.verifyApiKey(null);
-			Assert.assertEquals(false, isKeyValid);
+			assertFalse(isKeyValid);
 		} catch (ProwlException e) {
 			e.printStackTrace();
 		}

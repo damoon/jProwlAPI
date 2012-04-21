@@ -56,43 +56,42 @@ public class DefaultProwlEvent implements ProwlEvent {
 		this.url = url;
 	}
 	
-	@Override
 	public String getApiKey() {
 		return apiKey;
 	}
-	@Override
+	
 	public String getApplication() {
 		return application;
 	}
-	@Override
+	
 	public String getDescription() {
 		return description;
 	}
-	@Override
+	
 	public String getEvent() {
 		return event;
 	}
-	@Override
+	
 	public int getPriority() {
 		return priority;
 	}
-	@Override
+	
 	public void setApiKey(String apiKey) {
 		this.apiKey = apiKey;
 	}
-	@Override
+	
 	public void setApplication(String application) {
 		this.application = application;
 	}
-	@Override
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	@Override
+	
 	public void setEvent(String event) {
 		this.event = event;
 	}
-	@Override
+	
 	public void setPriority(int prio) {
 		this.priority = prio;
 	}

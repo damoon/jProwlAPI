@@ -1,3 +1,8 @@
+import net.sourceforge.prowl.api.DefaultProwlEvent;
+import net.sourceforge.prowl.api.ProwlClient;
+import net.sourceforge.prowl.api.ProwlEvent;
+import net.sourceforge.prowl.exception.ProwlException;
+
 public class Example {
 
 	public static void main(String[] args) {

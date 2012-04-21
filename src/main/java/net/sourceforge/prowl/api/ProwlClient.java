@@ -91,26 +91,37 @@ public class ProwlClient {
 			throw new IllegalArgumentException("The priority is out of range -2<x>2");
 		}
 		
-		String apiKey = prowlEvent.getApiKey();
-		String application = prowlEvent.getApplication();
-		String event = prowlEvent.getEvent();
-		String desc = prowlEvent.getDescription();
-		String url = prowlEvent.getUrl();
-
-		//escape all strings
-		application = URLEncoder.escapeString(application);
-		event = URLEncoder.escapeString(event);
-		desc = URLEncoder.escapeString(desc);
-		url = URLEncoder.escapeString(url);
-		
 		ProwlURLBuilder prowlUrl = DefaultProwlURLBuilder.createUrl().useCommand(ProwlCommand.add);
+
+		String apiKey = prowlEvent.getApiKey();
+		apiKey = URLEncoder.escapeString(apiKey);
 		prowlUrl.appendParam(ProwlParameter.apikey, apiKey);
+		
+		String providerKey = this.providerKey;
+		if (providerKey != null) {
+			providerKey = URLEncoder.escapeString(providerKey);
+			prowlUrl.appendParam(ProwlParameter.providerkey, providerKey);
+		}
+		
+		String application = prowlEvent.getApplication();
+		application = URLEncoder.escapeString(application);
 		prowlUrl.appendParam(ProwlParameter.application, application);
-		prowlUrl.appendParam(ProwlParameter.event, event);
-		prowlUrl.appendParam(ProwlParameter.description, desc);
+		
 		prowlUrl.appendParam(ProwlParameter.priority, String.valueOf(priority));
-		prowlUrl.appendParam(ProwlParameter.url, url);
-		prowlUrl.appendParam(ProwlParameter.providerkey, providerKey);
+
+		String event = prowlEvent.getEvent();
+		event = URLEncoder.escapeString(event);
+		prowlUrl.appendParam(ProwlParameter.event, event);
+		
+		String desc = prowlEvent.getDescription();
+		desc = URLEncoder.escapeString(desc);
+		prowlUrl.appendParam(ProwlParameter.description, desc);
+		
+		String url = prowlEvent.getUrl();
+		if (url != null) {
+			url = URLEncoder.escapeString(url);
+			prowlUrl.appendParam(ProwlParameter.url, url);
+		}
 		
 		String finalUrl = prowlUrl.getURL();
 		String response = sendPushNotification(finalUrl);
