@@ -1,4 +1,4 @@
-package net.sourceforge.prowl;
+package net.sf.prowl;
 
 import java.util.HashMap;
 import java.util.Map;

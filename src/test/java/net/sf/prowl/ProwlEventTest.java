@@ -1,4 +1,4 @@
-package net.sourceforge.prowl;
+package net.sf.prowl;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,4 @@
-package net.sourceforge.prowl;
+package net.sf.prowl;
 
 public class ProwlException extends Exception
 {

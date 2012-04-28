@@ -1,4 +1,4 @@
-package net.sourceforge.prowl;
+package net.sf.prowl;
 
 /**
  * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
