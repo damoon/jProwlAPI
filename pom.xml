@@ -3,7 +3,7 @@
 
 	<groupId>net.sourceforge.prowl</groupId>
 	<artifactId>jprowlapi</artifactId>
-	<version>0.6</version>
+	<version>0.7</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -34,6 +34,10 @@
 						<property>
 							<name>prowlApikey</name>
 							<value>${prowl.test.apikey}</value>
+						</property>
+						<property>
+							<name>nmaApikey</name>
+							<value>${nma.test.apikey}</value>
 						</property>
 					</systemProperties>
 				</configuration>

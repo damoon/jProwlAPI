@@ -11,20 +11,17 @@ import org.apache.commons.codec.net.URLCodec;
  * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
-public class UrlBuilder
+class UrlBuilder
 {
-
-	private static String baseUrl = "https://api.prowlapp.com/publicapi/";
-	
-	private String prowlCommand;
+	private String baseUrl;
 	
 	private Map<String, String> paramMap = new HashMap<String, String>();
 
 	private URLCodec codec = new URLCodec("UTF-8");
 
-	public UrlBuilder(String prowlCommand)
+	public UrlBuilder(String baseUrl)
 	{
-		this.prowlCommand = prowlCommand;
+		this.baseUrl = baseUrl;
 	}
 
 	public UrlBuilder setStringEncoder(URLCodec codec)
@@ -42,13 +39,11 @@ public class UrlBuilder
 		return this;
 	}
 
-	public String getUrlAsString() throws ProwlException
+	public String getUrlAsString() throws ServiceException
 	{
 		StringBuilder url = new StringBuilder();
 
 		url.append(baseUrl);
-
-		url.append(prowlCommand);
 
 		if (!paramMap.isEmpty())
 		{
@@ -69,7 +64,7 @@ public class UrlBuilder
 				}
 				catch (EncoderException e)
 				{
-					throw new ProwlException(e);
+					throw new ServiceException(e);
 				}
 				isFirst = false;
 			}

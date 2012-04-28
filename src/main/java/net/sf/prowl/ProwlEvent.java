@@ -4,50 +4,13 @@ package net.sf.prowl;
  * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
-public class ProwlEvent
+public class ProwlEvent extends Event
 {
-	private String description;
-
-	private String event;
-
 	private String url;
-
-	private int priority = 0;
 
 	public ProwlEvent(String event, String description)
 	{
-		this.event = event;
-		this.description = description;
-	}
-
-	public void setPriority(int prio)
-	{
-		this.priority = prio;
-	}
-
-	public int getPriority()
-	{
-		return priority;
-	}
-
-	public void setEvent(String event)
-	{
-		this.event = event;
-	}
-
-	public String getEvent()
-	{
-		return event;
-	}
-
-	public void setDescription(String description)
-	{
-		this.description = description;
-	}
-
-	public String getDescription()
-	{
-		return description;
+		super(event, description);
 	}
 
 	public void setUrl(String url)

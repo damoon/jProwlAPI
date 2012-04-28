@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class ProwlExceptionTest
+public class ServiceExceptionTest
 {
 	@Test
 	public void test()
 	{
 		Exception exception = new Exception("abc test");
-		ProwlException prowlException = new ProwlException(exception );
+		ServiceException prowlException = new ServiceException(exception );
 		assertSame("abc test", prowlException.getCause().getMessage());
 	}
 
