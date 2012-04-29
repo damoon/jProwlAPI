@@ -4,7 +4,7 @@ package net.sf.prowl;
  * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
-class Event
+public class Event
 {
 	protected String description;
 

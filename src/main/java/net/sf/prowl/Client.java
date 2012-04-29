@@ -8,7 +8,7 @@ import java.net.URL;
  * BSD-style license; for more info see http://jprowlapi.sourceforge.net/
  */
 
-abstract class Client
+public abstract class Client
 {
 
 	private String apikey;
