@@ -4,7 +4,7 @@ import java.net.HttpURLConnection;
 
 public class MockNotificationClient extends Client
 {
-	int getNumberOfEventsPushed = 0;
+	private static int getNumberOfEventsPushed = 0;
 
 	public MockNotificationClient(String apiKey, String application)
 	{
@@ -28,10 +28,15 @@ public class MockNotificationClient extends Client
 	{
 		getNumberOfEventsPushed++;
 	}
-
-	public Object getNumberOfEventsPushed()
+	
+	public static int getNumberOfEventsPushed()
 	{
 		return getNumberOfEventsPushed;
+	}
+	
+	public static void resetNumberOfEventsPushed()
+	{
+		getNumberOfEventsPushed = 0;
 	}
 
 }

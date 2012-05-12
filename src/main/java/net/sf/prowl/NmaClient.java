@@ -28,20 +28,39 @@ public class NmaClient extends Client
 
 	protected Response getResponse(HttpURLConnection connection) throws ServiceException
 	{
-		InputStream httpStream;
+		StringBuilder stringBuilder = new StringBuilder();
 		try
 		{
-			httpStream = connection.getInputStream();
-
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpStream));
-
-			StringBuilder stringBuilder = new StringBuilder();
-			String line;
-			while ((line = bufferedReader.readLine()) != null)
+			InputStream httpStream = connection.getInputStream();
+			try
 			{
-				stringBuilder.append(line + "\n");
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpStream));
+				try 
+				{
+					String line;
+					while ((line = bufferedReader.readLine()) != null)
+					{
+						stringBuilder.append(line + "\n");
+					}
+				}
+				catch (IOException e)
+				{
+					throw new ServiceException(e);
+				}
+				finally
+				{
+					bufferedReader.close();
+				}
 			}
-
+			catch (IOException e)
+			{
+				throw new ServiceException(e);
+			}
+			finally
+			{
+				httpStream.close();
+			}
+			
 			Pattern sqlFilePattern = Pattern.compile(" code=\"([^\\\"]+)\"");
 
 			Matcher matcher = sqlFilePattern.matcher(stringBuilder.toString());
@@ -55,9 +74,8 @@ public class NmaClient extends Client
 			{
 				throw new ServiceException("the reponse code can not be dederment");
 			}
-
+			
 			return new NmaResponse(code);
-
 		}
 		catch (IOException e)
 		{
