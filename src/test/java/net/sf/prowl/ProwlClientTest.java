@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class ProwlClientTest {
 
-	@Test(expected=ServiceException.class)
-	public void useWrongApikey() throws ServiceException {
+	@Test(expected=GatewayException.class)
+	public void useWrongApikey() throws GatewayException {
 		ProwlClient client = new ProwlClient("brokenKey", "junittest");
 		ProwlEvent event = new ProwlEvent("test event", "test description");
 		client.setTimeouts(2000, 2000);
@@ -17,13 +17,13 @@ public class ProwlClientTest {
 	}
 	
 	@Test
-	public void testWrongApiKeyVerification() throws ServiceException {
+	public void testWrongApiKeyVerification() throws GatewayException {
 		ProwlClient client = new ProwlClient("brokenKey", "junit");
 		assertFalse(client.verifyApiKey());
 	}
 
 	@Test
-	public void testSendProwlMessage() throws ServiceException {
+	public void testSendProwlMessage() throws GatewayException {
 		ProwlClient client = new ProwlClient(System.getProperty("prowlApikey"), "junittest");
 		ProwlEvent event = new ProwlEvent("test event", "test description");
 		client.setTimeouts(2000, 2000);
@@ -32,7 +32,7 @@ public class ProwlClientTest {
 	}
 
 	@Test
-	public void testSendMessage() throws ServiceException {
+	public void testSendMessage() throws GatewayException {
 		ProwlClient client = new ProwlClient(System.getProperty("prowlApikey"), "junittest");
 		Event event = new Event("test event", "test description");
 		client.setTimeouts(2000, 2000);
@@ -41,7 +41,7 @@ public class ProwlClientTest {
 	}
 	
 	@Test
-	public void testValidApiKeyVerification() throws ServiceException {
+	public void testValidApiKeyVerification() throws GatewayException {
 		ProwlClient client = new ProwlClient(System.getProperty("prowlApikey"), "junit");
 		assertTrue(client.verifyApiKey());
 	}

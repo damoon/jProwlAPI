@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>net.sf.prowl</groupId>
 	<artifactId>jprowlapi</artifactId>
-	<version>0.7.3</version>
+	<version>0.7.4</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,16 +31,10 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
 				<configuration>
-					<systemProperties>
-						<property>
-							<name>prowlApikey</name>
-							<value>${prowl.test.apikey}</value>
-						</property>
-						<property>
-							<name>nmaApikey</name>
-							<value>${nma.test.apikey}</value>
-						</property>
-					</systemProperties>
+					<systemPropertyVariables>
+						<prowlApikey>${prowl.test.apikey}</prowlApikey>
+						<nmaApikey>${nma.test.apikey}</nmaApikey>
+					</systemPropertyVariables>
 				</configuration>
 			</plugin>
 			<plugin>

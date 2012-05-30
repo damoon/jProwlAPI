@@ -26,7 +26,7 @@ public class NmaClient extends Client
 		this.developerKey = developerKey;
 	}
 
-	protected Response getResponse(HttpURLConnection connection) throws ServiceException
+	protected Response getResponse(HttpURLConnection connection) throws GatewayException
 	{
 		StringBuilder stringBuilder = new StringBuilder();
 		try
@@ -45,7 +45,7 @@ public class NmaClient extends Client
 				}
 				catch (IOException e)
 				{
-					throw new ServiceException(e);
+					throw new GatewayException(e);
 				}
 				finally
 				{
@@ -54,7 +54,7 @@ public class NmaClient extends Client
 			}
 			catch (IOException e)
 			{
-				throw new ServiceException(e);
+				throw new GatewayException(e);
 			}
 			finally
 			{
@@ -72,18 +72,18 @@ public class NmaClient extends Client
 			}
 			else
 			{
-				throw new ServiceException("the reponse code can not be dederment");
+				throw new GatewayException("the reponse code can not be dederment");
 			}
 			
 			return new NmaResponse(code);
 		}
 		catch (IOException e)
 		{
-			throw new ServiceException(e);
+			throw new GatewayException(e);
 		}
 	}
 
-	public void pushEvent(Event nmaEvent) throws ServiceException
+	public void pushEvent(Event nmaEvent) throws GatewayException
 	{
 		UrlBuilder prowlUrl = new UrlBuilder("https://www.notifymyandroid.com/publicapi/notify");
 
@@ -92,7 +92,7 @@ public class NmaClient extends Client
 		Response response = getResponse(prowlUrl, nmaEvent);
 		if (response.getCode() != 200)
 		{
-			throw new ServiceException(response.getMessage());
+			throw new GatewayException(response.getMessage());
 		}
 	}
 
@@ -103,7 +103,7 @@ public class NmaClient extends Client
 		{
 			return getResponse(prowlUrl).getCode() == 200;
 		}
-		catch (ServiceException e)
+		catch (GatewayException e)
 		{
 			return false;
 		}

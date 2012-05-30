@@ -21,7 +21,7 @@ public class ProwlClient extends Client
 		this.providerKey = providerKey;
 	}
 
-	protected Response getResponse(HttpURLConnection connection) throws ServiceException
+	protected Response getResponse(HttpURLConnection connection) throws GatewayException
 	{
 		try
 		{
@@ -29,11 +29,11 @@ public class ProwlClient extends Client
 		}
 		catch (IOException e)
 		{
-			throw new ServiceException(e);
+			throw new GatewayException(e);
 		}
 	}
 
-	public void pushEvent(ProwlEvent prowlEvent) throws ServiceException
+	public void pushEvent(ProwlEvent prowlEvent) throws GatewayException
 	{
 		UrlBuilder prowlUrl = new UrlBuilder("https://api.prowlapp.com/publicapi/add");
 
@@ -43,12 +43,12 @@ public class ProwlClient extends Client
 		Response response = getResponse(prowlUrl, (Event)prowlEvent);
 		if (response.getCode() != 200)
 		{
-			throw new ServiceException(response.getMessage());
+			throw new GatewayException(response.getMessage());
 		}
 	}
 
 	@Override
-	public void pushEvent(Event event) throws ServiceException
+	public void pushEvent(Event event) throws GatewayException
 	{
 		UrlBuilder prowlUrl = new UrlBuilder("https://api.prowlapp.com/publicapi/add");
 
@@ -57,7 +57,7 @@ public class ProwlClient extends Client
 		Response response = getResponse(prowlUrl, event);
 		if (response.getCode() != 200)
 		{
-			throw new ServiceException(response.getMessage());
+			throw new GatewayException(response.getMessage());
 		}
 	}
 
@@ -68,7 +68,7 @@ public class ProwlClient extends Client
 		{
 			return getResponse(prowlUrl).getCode() == 200;
 		}
-		catch (ServiceException e)
+		catch (GatewayException e)
 		{
 			return false;
 		}

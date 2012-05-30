@@ -8,8 +8,8 @@ import org.junit.Test;
 public class UrlBuilderTest
 {
 
-	@Test(expected=ServiceException.class)
-	public void throwException() throws ServiceException
+	@Test(expected=GatewayException.class)
+	public void throwException() throws GatewayException
 	{
 		UrlBuilder builder = new UrlBuilder("https://server.lan/command");
 		builder.setParam("a", "b");
@@ -18,14 +18,14 @@ public class UrlBuilderTest
 	}
 
 	@Test
-	public void emptyParams() throws ServiceException
+	public void emptyParams() throws GatewayException
 	{
 		UrlBuilder builder = new UrlBuilder("https://server.lan/command");
 		assertEquals("https://server.lan/command", builder.getUrlAsString());
 	}
 
 	@Test
-	public void oneParam() throws ServiceException
+	public void oneParam() throws GatewayException
 	{
 		UrlBuilder builder = new UrlBuilder("https://server.lan/command");
 		builder.setParam("key", "value");
@@ -33,7 +33,7 @@ public class UrlBuilderTest
 	}
 	
 	@Test
-	public void threeParam() throws ServiceException
+	public void threeParam() throws GatewayException
 	{
 		UrlBuilder builder = new UrlBuilder("https://server.lan/command");
 		builder.setParam("key1", "value1");

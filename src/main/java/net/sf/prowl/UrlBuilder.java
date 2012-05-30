@@ -39,7 +39,7 @@ class UrlBuilder
 		return this;
 	}
 
-	public String getUrlAsString() throws ServiceException
+	public String getUrlAsString() throws GatewayException
 	{
 		StringBuilder url = new StringBuilder();
 
@@ -64,7 +64,7 @@ class UrlBuilder
 				}
 				catch (EncoderException e)
 				{
-					throw new ServiceException(e);
+					throw new GatewayException(e);
 				}
 				isFirst = false;
 			}

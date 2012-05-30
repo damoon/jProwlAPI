@@ -18,13 +18,13 @@ public class MockNotificationClient extends Client
 	}
 
 	@Override
-	protected Response getResponse(HttpURLConnection connection) throws ServiceException
+	protected Response getResponse(HttpURLConnection connection) throws GatewayException
 	{
 		return null;
 	}
 
 	@Override
-	public void pushEvent(Event event) throws ServiceException
+	public void pushEvent(Event event) throws GatewayException
 	{
 		getNumberOfEventsPushed++;
 	}
