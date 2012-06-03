@@ -52,4 +52,17 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Snapshots</name>
+			<url>${snapshots.url}</url>
+		</snapshotRepository>
+		<repository>
+			<id>releases</id>
+			<name>Releases</name>
+			<url>${releases.url}</url>
+		</repository>
+	</distributionManagement>
+
 </project>
